@@ -1,3 +1,5 @@
 # Prisma Migrate lockfile v1
 
 20201207160057-create-initial-models---shopnote--item
+20201207164322-correct-field-name---description
+20201207171109-modify-schema

@@ -2,7 +2,7 @@ datasource DS {
   // optionally set multiple providers
   // example: provider = ["sqlite", "postgresql"]
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url = "***"
 }
 
 generator client {
@@ -13,8 +13,8 @@ generator client {
 model ShopNote {
   id          Int      @id @default(autoincrement())
   name        String
-  description String
-  updatedAt   DateTime @default(now())
+  description String?
+  updatedAt   DateTime
   items       Item[]
 }
 
