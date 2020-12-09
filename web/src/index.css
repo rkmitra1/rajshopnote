@@ -11,3 +11,17 @@
 /**
  * END --- TAILWIND GENERATOR EDIT
  */
+
+ .urgent {
+  display: inline-block;
+  vertical-align: middle;
+  background-color: red;
+  cursor: pointer;
+}
+
+.normal {
+  display: inline-block;
+  vertical-align: middle;
+  background-color: gray;
+  cursor: pointer;
+}
