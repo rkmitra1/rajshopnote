@@ -37,6 +37,7 @@ export const Success = ({ item }) => {
   })
 
   const onSave = (input, id) => {
+    // console.log('onSave:', input)
     const castInput = Object.assign(input, { noteId: parseInt(input.noteId) })
     updateItem({ variables: { id, input: castInput } })
   }

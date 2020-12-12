@@ -31,5 +31,8 @@ export const schema = gql`
     createItem(input: CreateItemInput!): Item!
     updateItem(id: Int!, input: UpdateItemInput!): Item!
     deleteItem(id: Int!): Item!
+    updateItemUrgent(id: Int!, urgent: Boolean!): Item
+    updateItemChecked(id: Int!, checked: Boolean!): Item
+    updateItemName(id: Int!, name: String!): Item
   }
 `

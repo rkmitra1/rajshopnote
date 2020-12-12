@@ -31,7 +31,7 @@ export const createItem = ({ input }) => {
 
 export const updateItem = ({ id, input }) => {
   return db.item.update({
-    data: input,
+    data: foreignKeyReplacement(input),
     where: { id },
   })
 }
@@ -44,4 +44,25 @@ export const deleteItem = ({ id }) => {
 
 export const Item = {
   note: (_obj, { root }) => db.item.findOne({ where: { id: root.id } }).note(),
+}
+
+export const updateItemUrgent = ({ id, urgent }) => {
+  return db.item.update({
+    data: { urgent },
+    where: { id },
+  })
+}
+
+export const updateItemChecked = ({ id, checked }) => {
+  return db.item.update({
+    data: { checked },
+    where: { id },
+  })
+}
+
+export const updateItemName = ({ id, name }) => {
+  return db.item.update({
+    data: { name },
+    where: { id },
+  })
 }
