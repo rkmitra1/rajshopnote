@@ -3,19 +3,22 @@ import { Flash } from '@redwoodjs/web'
 
 const ShopNotesLayout = (props) => {
   return (
-    <div className="rw-scaffold">
+    <div className="Xrw-scaffold">
       <Flash timeout={1000} />
-      <header className="rw-header">
-        <h1 className="rw-heading rw-heading-primary">
-          <Link to={routes.shopNotes()} className="rw-link">
+      <header className="flex justify-between items-center py-4 px-8 bg-primary text-white">
+        <h1 className="">
+          <Link to={routes.home()} className="text-white">
             ShopNotes
           </Link>
         </h1>
-        <Link to={routes.newShopNote()} className="rw-button rw-button-green">
-          <div className="rw-button-icon">+</div> New ShopNote
+        <Link
+          to={routes.newShopNote()}
+          className="border-white border bg-secondary rounded-md p-1"
+        >
+          + ShopNote
         </Link>
       </header>
-      <main className="rw-main">{props.children}</main>
+      <main className="">{props.children}</main>
     </div>
   )
 }

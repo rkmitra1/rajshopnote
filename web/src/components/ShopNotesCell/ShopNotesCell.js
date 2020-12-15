@@ -23,6 +23,7 @@ export const QUERY = gql`
         name
         checked
         urgent
+        noteId
       }
     }
   }

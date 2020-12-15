@@ -46,3 +46,10 @@ export const ShopNote = {
   items: (_obj, { root }) =>
     db.shopNote.findOne({ where: { id: root.id } }).items(),
 }
+
+export const updateShopNoteName = ({ id, name }) => {
+  return db.shopNote.update({
+    data: { name },
+    where: { id },
+  })
+}

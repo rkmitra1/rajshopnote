@@ -18,7 +18,7 @@ const NewShopNote = () => {
     CREATE_SHOP_NOTE_MUTATION,
     {
       onCompleted: () => {
-        navigate(routes.shopNotes())
+        navigate(routes.home())
         addMessage('ShopNote created.', { classes: 'rw-flash-success' })
       },
     }

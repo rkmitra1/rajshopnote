@@ -1,5 +1,18 @@
+import { routes, navigate, Redirect } from '@redwoodjs/router'
 import { useMutation, useFlash } from '@redwoodjs/web'
 import React, { useState } from 'react'
+import { PlusCircle, XCircle, Save, Trash2 } from 'react-feather'
+import { format, formatDistanceToNow } from 'date-fns'
+
+const UPDATE_SHOP_NOTE_NAME_MUTATION = gql`
+  mutation UpdateShopNoteNameMutation($id: Int!, $name: String!) {
+    updateShopNoteName(id: $id, name: $name) {
+      id
+      __typename
+      name
+    }
+  }
+`
 
 const UPDATE_ITEM_MUTATION = gql`
   mutation UpdateItemMutation($id: Int!, $input: UpdateItemInput!) {
@@ -32,6 +45,14 @@ const UPDATE_ITEM_CHECKED_MUTATION = gql`
   }
 `
 
+const CREATE_ITEM_MUTATION = gql`
+  mutation CreateItemMutation($input: CreateItemInput!) {
+    createItem(input: $input) {
+      id
+    }
+  }
+`
+
 const UPDATE_ITEM_NAME_MUTATION = gql`
   mutation UpdateItemNameMutation($id: Int!, $name: String!) {
     updateItemName(id: $id, name: $name) {
@@ -41,22 +62,103 @@ const UPDATE_ITEM_NAME_MUTATION = gql`
     }
   }
 `
+const DELETE_ITEM_MUTATION = gql`
+  mutation DeleteItemMutation($id: Int!) {
+    deleteItem(id: $id) {
+      id
+    }
+  }
+`
+
+const DELETE_SHOP_NOTE_MUTATION = gql`
+  mutation DeleteShopNoteMutation($id: Int!) {
+    deleteShopNote(id: $id) {
+      id
+    }
+  }
+`
 
 const ShopNoteDisplay = ({ shopnote }) => {
+  const { addMessage } = useFlash()
+
+  const [updateShopNoteName] = useMutation(UPDATE_SHOP_NOTE_NAME_MUTATION)
+
+  const [deleteShopNote] = useMutation(DELETE_SHOP_NOTE_MUTATION, {
+    onCompleted: () => {
+      addMessage('ShopNote deleted.', { classes: 'rw-flash-success' })
+      window.location.reload()
+    },
+  })
+
+  const [createItem, { loading, error }] = useMutation(CREATE_ITEM_MUTATION)
+
+  const onDeleteClick = (id) => {
+    if (confirm('Are you sure you want to delete shopNote ' + id + '?')) {
+      deleteShopNote({ variables: { id } })
+    }
+  }
+
+  const onClickAddItem = (noteId) => {
+    const newItem = {
+      name: 'new item',
+      urgent: false,
+      checked: false,
+      noteId: noteId,
+    }
+    console.log('onClickAddItem: ', newItem)
+    createItem({ variables: { input: newItem } })
+    window.location.reload()
+  }
+
+  const onUpdateShopNoteName = (id, name) => {
+    updateShopNoteName({ variables: { id, name } })
+  }
+
   return (
-    <div className="w-1/2 m-4 p-4 pt-2 bg-blue-500 rounded-xl border-gray-500 border-2 shadow-md">
-      <header className="flex justify-between">
+    <div className="w-80 m-1 p-4 pt-2 bg-blue-500 rounded-xl border-gray-500 border-2 shadow-md">
+      <header className="flex justify-between items-center">
         <h1 className="text-lg">
-          <a className="no-underline hover:underline text-black" href="#">
-            {shopnote.name}
-          </a>
+          <span className="">
+            <input
+              key={shopnote.id}
+              className="text-white bg-blue-500  w-40"
+              type="text"
+              defaultValue={shopnote.name}
+              onChange={(e) =>
+                onUpdateShopNoteName(shopnote.id, e.target.value, e)
+              }
+            />
+          </span>
         </h1>
-        <p className="text-grey-darker text-sm">
-          {shopnote.updatedAt.match(/(.*)T/)[1]}
-        </p>
+
+        <a
+          href="#"
+          title={'Delete shopNote ' + shopnote.id}
+          className="text-sm border-white border bg-red-500 rounded-md px-1 -pb-1"
+          onClick={() => onDeleteClick(shopnote.id)}
+        >
+          Delete
+        </a>
       </header>
-      <hr className="mt-1 mb-3" />
-      <div className="text-sm">{shopnote.description}</div>
+
+      <div className="flex justify-between items-center mb-2">
+        <hr className="w-1/3 display: inline-block" />
+        <span className="text-grey-darker text-xs mx-2">
+          {format(new Date(shopnote.updatedAt), 'MM/dd/yyyy')}
+        </span>
+        <hr className="w-1/3 display: inline-block" />
+      </div>
+
+      <div className="text-sm mb-2">{shopnote.description}</div>
+
+      {!shopnote.items.length && (
+        <span>
+          <PlusCircle
+            className="display: inline-block mx-1 w-4 h-4"
+            onClick={(e) => onClickAddItem(shopnote.id, e)}
+          ></PlusCircle>
+        </span>
+      )}
 
       {shopnote.items.map((item) => (
         <div className="text-sm">
@@ -71,6 +173,8 @@ const ItemDetail = ({ item }) => {
   const [updateItemUrgent] = useMutation(UPDATE_ITEM_URGENT_MUTATION)
   const [updateItemChecked] = useMutation(UPDATE_ITEM_CHECKED_MUTATION)
   const [updateItemName] = useMutation(UPDATE_ITEM_NAME_MUTATION)
+  const [createItem, { loading, error }] = useMutation(CREATE_ITEM_MUTATION)
+  const [deleteItem] = useMutation(DELETE_ITEM_MUTATION)
 
   const onUpdateUrgent = (id, urgent) => {
     console.log('onUpdateUrgent:', id, urgent)
@@ -91,8 +195,28 @@ const ItemDetail = ({ item }) => {
     updateItemName({ variables: { id, name } })
   }
 
+  const onClickDeleteItem = (id) => {
+    console.log('onClickDeleteItem')
+    if (confirm('Are you sure you want to delete item ' + id + '?')) {
+      deleteItem({ variables: { id } })
+      window.location.reload()
+    }
+  }
+
+  const onClickAddItem = (noteId) => {
+    const newItem = {
+      name: 'new item',
+      urgent: false,
+      checked: false,
+      noteId: noteId,
+    }
+    console.log('onClickAddItem: ', newItem)
+    createItem({ variables: { input: newItem } })
+    window.location.reload()
+  }
+
   return (
-    <div>
+    <div className="text-sm">
       <input
         name="checked"
         type="checkbox"
@@ -112,11 +236,23 @@ const ItemDetail = ({ item }) => {
       <span className="">
         <input
           key={item.id}
-          className="text-white bg-blue-500 border-b-2"
+          className="text-white bg-blue-500 border-b-2 w-40"
           type="text"
           defaultValue={item.name}
           onChange={(e) => onUpdateName(item.id, e.target.value, e)}
         />
+      </span>
+      <span>
+        <PlusCircle
+          className="display: inline-block mx-1 w-4 h-4"
+          onClick={(e) => onClickAddItem(item.noteId, e)}
+        ></PlusCircle>
+      </span>
+      <span>
+        <Trash2
+          className="display: inline-block mx-1 w-4 h-4"
+          onClick={(e) => onClickDeleteItem(item.id)}
+        ></Trash2>
       </span>
     </div>
   )
