@@ -105,8 +105,17 @@ const ShopNoteDisplay = ({ shopnote }) => {
 
   const [createItem, { loading, error }] = useMutation(CREATE_ITEM_MUTATION)
 
-  const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete shopNote ' + id + '?')) {
+  const onDeleteClick = (shopnote) => {
+    if (
+      confirm(
+        'Are you sure you want to delete shopNote ' +
+          shopnote.id +
+          ' "' +
+          shopnote.name +
+          '" ?'
+      )
+    ) {
+      const id = shopnote.id
       deleteShopNote({ variables: { id } })
     }
   }
@@ -152,7 +161,7 @@ const ShopNoteDisplay = ({ shopnote }) => {
           href="#"
           title={'Delete shopNote ' + shopnote.id}
           className="text-sm border-white border bg-red-500 rounded-md px-1 -pb-1"
-          onClick={() => onDeleteClick(shopnote.id)}
+          onClick={() => onDeleteClick(shopnote)}
         >
           Delete
         </a>
@@ -224,9 +233,18 @@ const ItemDetail = ({ item }) => {
     updateItemName({ variables: { id, name } })
   }
 
-  const onClickDeleteItem = (id) => {
+  const onClickDeleteItem = (item) => {
     console.log('onClickDeleteItem')
-    if (confirm('Are you sure you want to delete item ' + id + '?')) {
+    if (
+      confirm(
+        'Are you sure you want to delete item ' +
+          item.id +
+          ' "' +
+          item.name +
+          '" ?'
+      )
+    ) {
+      const id = item.id
       deleteItem({ variables: { id } })
       window.location.reload()
     }
@@ -280,7 +298,7 @@ const ItemDetail = ({ item }) => {
       <span>
         <Trash2
           className="display: inline-block mx-1 w-4 h-4"
-          onClick={(e) => onClickDeleteItem(item.id)}
+          onClick={(e) => onClickDeleteItem(item)}
         ></Trash2>
       </span>
     </div>
