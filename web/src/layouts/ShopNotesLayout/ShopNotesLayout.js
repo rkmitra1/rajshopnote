@@ -13,7 +13,7 @@ const ShopNotesLayout = (props) => {
         </h1>
         <Link
           to={routes.newShopNote()}
-          className="border-white border bg-secondary rounded-md p-1"
+          className="border-white border bg-secondary rounded-lg px-1"
         >
           + ShopNote
         </Link>

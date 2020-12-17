@@ -132,7 +132,7 @@ const ShopNoteDisplay = ({ shopnote }) => {
   }
 
   return (
-    <div className="w-80 m-1 p-4 pt-2 bg-blue-500 rounded-xl border-gray-500 border-2 shadow-md">
+    <div className="w-96 m-1 p-4 pt-2 bg-blue-500 rounded-xl border-gray-500 border-2 shadow-md">
       <header className="flex justify-between items-center">
         <h1 className="text-lg">
           <span className="">
@@ -158,7 +158,7 @@ const ShopNoteDisplay = ({ shopnote }) => {
         </a>
       </header>
 
-      <div className="flex justify-between items-center mb-2">
+      <div className="flex justify-between items-center">
         <hr className="w-1/3 display: inline-block" />
         <span className="text-grey-darker text-xs mx-2">
           {format(new Date(shopnote.updatedAt), 'MM/dd/yyyy')}
@@ -169,7 +169,7 @@ const ShopNoteDisplay = ({ shopnote }) => {
       <span className="">
         <input
           key={shopnote.id}
-          className="text-sm bg-blue-500  w-40"
+          className="text-sm bg-blue-500  w-80 mb-2"
           type="text"
           defaultValue={shopnote.description}
           onChange={(e) =>
@@ -265,7 +265,7 @@ const ItemDetail = ({ item }) => {
       <span className="">
         <input
           key={item.id}
-          className="text-white bg-blue-500 border-b-2 w-40"
+          className="text-white bg-blue-500 border-b-2 w-56"
           type="text"
           defaultValue={item.name}
           onChange={(e) => onUpdateName(item.id, e.target.value, e)}
