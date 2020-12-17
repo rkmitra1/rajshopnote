@@ -27,5 +27,6 @@ export const schema = gql`
     updateShopNote(id: Int!, input: UpdateShopNoteInput!): ShopNote!
     deleteShopNote(id: Int!): ShopNote!
     updateShopNoteName(id: Int!, name: String!): ShopNote
+    updateShopNoteDescription(id: Int!, description: String!): ShopNote
   }
 `

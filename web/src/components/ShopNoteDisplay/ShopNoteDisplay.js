@@ -14,6 +14,16 @@ const UPDATE_SHOP_NOTE_NAME_MUTATION = gql`
   }
 `
 
+const UPDATE_SHOP_NOTE_DESCRIPTION_MUTATION = gql`
+  mutation UpdateShopNoteDescriptionMutation($id: Int!, $description: String!) {
+    updateShopNoteDescription(id: $id, description: $description) {
+      id
+      __typename
+      description
+    }
+  }
+`
+
 const UPDATE_ITEM_MUTATION = gql`
   mutation UpdateItemMutation($id: Int!, $input: UpdateItemInput!) {
     updateItem(id: $id, input: $input) {
@@ -82,6 +92,9 @@ const ShopNoteDisplay = ({ shopnote }) => {
   const { addMessage } = useFlash()
 
   const [updateShopNoteName] = useMutation(UPDATE_SHOP_NOTE_NAME_MUTATION)
+  const [updateShopNoteDescription] = useMutation(
+    UPDATE_SHOP_NOTE_DESCRIPTION_MUTATION
+  )
 
   const [deleteShopNote] = useMutation(DELETE_SHOP_NOTE_MUTATION, {
     onCompleted: () => {
@@ -100,7 +113,7 @@ const ShopNoteDisplay = ({ shopnote }) => {
 
   const onClickAddItem = (noteId) => {
     const newItem = {
-      name: 'new item',
+      name: '',
       urgent: false,
       checked: false,
       noteId: noteId,
@@ -112,6 +125,10 @@ const ShopNoteDisplay = ({ shopnote }) => {
 
   const onUpdateShopNoteName = (id, name) => {
     updateShopNoteName({ variables: { id, name } })
+  }
+
+  const onUpdateShopNoteDescription = (id, description) => {
+    updateShopNoteDescription({ variables: { id, description } })
   }
 
   return (
@@ -149,7 +166,19 @@ const ShopNoteDisplay = ({ shopnote }) => {
         <hr className="w-1/3 display: inline-block" />
       </div>
 
-      <div className="text-sm mb-2">{shopnote.description}</div>
+      <span className="">
+        <input
+          key={shopnote.id}
+          className="text-sm bg-blue-500  w-40"
+          type="text"
+          defaultValue={shopnote.description}
+          onChange={(e) =>
+            onUpdateShopNoteDescription(shopnote.id, e.target.value, e)
+          }
+        />
+      </span>
+
+      {/* <div className="text-sm mb-2">{shopnote.description}</div> */}
 
       {!shopnote.items.length && (
         <span>
@@ -205,7 +234,7 @@ const ItemDetail = ({ item }) => {
 
   const onClickAddItem = (noteId) => {
     const newItem = {
-      name: 'new item',
+      name: '',
       urgent: false,
       checked: false,
       noteId: noteId,

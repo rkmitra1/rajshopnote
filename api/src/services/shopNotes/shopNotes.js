@@ -53,3 +53,10 @@ export const updateShopNoteName = ({ id, name }) => {
     where: { id },
   })
 }
+
+export const updateShopNoteDescription = ({ id, description }) => {
+  return db.shopNote.update({
+    data: { description },
+    where: { id },
+  })
+}
