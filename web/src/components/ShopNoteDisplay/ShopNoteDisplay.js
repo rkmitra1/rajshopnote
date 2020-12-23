@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 import { PlusCircle, XCircle, Save, Trash2 } from 'react-feather'
 import { format, formatDistanceToNow } from 'date-fns'
 
+import { QUERY } from 'src/components/ShopNotesCell'
+
 const UPDATE_SHOP_NOTE_NAME_MUTATION = gql`
   mutation UpdateShopNoteNameMutation($id: Int!, $name: String!) {
     updateShopNoteName(id: $id, name: $name) {
@@ -97,10 +99,8 @@ const ShopNoteDisplay = ({ shopnote }) => {
   )
 
   const [deleteShopNote] = useMutation(DELETE_SHOP_NOTE_MUTATION, {
-    onCompleted: () => {
-      addMessage('ShopNote deleted.', { classes: 'rw-flash-success' })
-      window.location.reload()
-    },
+    refetchQueries: [{ query: QUERY }],
+    awaitRefetchQueries: true,
   })
 
   const [createItem, { loading, error }] = useMutation(CREATE_ITEM_MUTATION)
