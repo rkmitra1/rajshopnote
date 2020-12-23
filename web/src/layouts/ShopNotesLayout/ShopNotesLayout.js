@@ -1,7 +1,34 @@
 import { Link, routes } from '@redwoodjs/router'
 import { Flash } from '@redwoodjs/web'
 
+import { useMutation, useFlash } from '@redwoodjs/web'
+import { QUERY } from 'src/components/ShopNotesCell'
+
+const CREATE_SHOP_NOTE_MUTATION = gql`
+  mutation CreateShopNoteMutation($input: CreateShopNoteInput!) {
+    createShopNote(input: $input) {
+      id
+    }
+  }
+`
+
 const ShopNotesLayout = (props) => {
+  const [createShopNote, { loading, error }] = useMutation(
+    CREATE_SHOP_NOTE_MUTATION,
+    {
+      refetchQueries: [{ query: QUERY }],
+      awaitRefetchQueries: true,
+    }
+  )
+
+  const onClickAddShopNote = () => {
+    const newShopNote = {
+      name: '',
+      description: '',
+    }
+    createShopNote({ variables: { input: newShopNote } })
+  }
+
   return (
     <div className="Xrw-scaffold">
       <Flash timeout={1000} />
@@ -11,12 +38,12 @@ const ShopNotesLayout = (props) => {
             ShopNotes
           </Link>
         </h1>
-        <Link
-          to={routes.newShopNote()}
+        <span
           className="border-white border bg-secondary rounded-lg px-1"
+          onClick={(e) => onClickAddShopNote(e)}
         >
           + ShopNote
-        </Link>
+        </span>
       </header>
       <main className="">{props.children}</main>
     </div>
