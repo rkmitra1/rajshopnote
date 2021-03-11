@@ -20,7 +20,7 @@ export const items = () => {
 }
 
 export const item = ({ id }) => {
-  return db.item.findOne({
+  return db.item.findUnique({
     where: { id },
   })
 }
@@ -43,7 +43,8 @@ export const deleteItem = ({ id }) => {
 }
 
 export const Item = {
-  note: (_obj, { root }) => db.item.findOne({ where: { id: root.id } }).note(),
+  note: (_obj, { root }) =>
+    db.item.findUnique({ where: { id: root.id } }).note(),
 }
 
 export const updateItemUrgent = ({ id, urgent }) => {

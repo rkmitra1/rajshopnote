@@ -20,7 +20,7 @@ export const shopNotes = () => {
 }
 
 export const shopNote = ({ id }) => {
-  return db.shopNote.findOne({
+  return db.shopNote.findUnique({
     where: { id },
   })
 }
@@ -44,7 +44,7 @@ export const deleteShopNote = ({ id }) => {
 
 export const ShopNote = {
   items: (_obj, { root }) =>
-    db.shopNote.findOne({ where: { id: root.id } }).items(),
+    db.shopNote.findUnique({ where: { id: root.id } }).items(),
 }
 
 export const updateShopNoteName = ({ id, name }) => {
