@@ -1,6 +1,8 @@
 import { useMutation, useFlash } from '@redwoodjs/web'
 import { PlusCircle, XCircle, Save, Trash2 } from 'react-feather'
 import { format, formatDistanceToNow } from 'date-fns'
+import debounce from 'lodash.debounce'
+import React, { useCallback } from 'react'
 
 import { QUERY } from 'src/components/ShopNotesCell'
 
@@ -73,8 +75,14 @@ const ShopNoteItemDisplay = ({ item }) => {
     updateItemChecked({ variables: { id, checked } })
   }
 
+  const debouncedUpdateName = useCallback(
+    debounce((id, name) => updateItemName({ variables: { id, name } }), 1000),
+    [] // will be created only once initially
+  )
+
   const onUpdateName = (id, name) => {
-    updateItemName({ variables: { id, name } })
+    debouncedUpdateName(id, name)
+    // updateItemName({ variables: { id, name } })
   }
 
   const onClickDeleteItem = (item) => {

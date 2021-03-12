@@ -16,6 +16,7 @@
     "@redwoodjs/forms": "^0.26.2",
     "@redwoodjs/router": "^0.26.2",
     "@redwoodjs/web": "^0.26.2",
+    "lodash": "^4.17.21",
     "marked": "^1.2.5",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

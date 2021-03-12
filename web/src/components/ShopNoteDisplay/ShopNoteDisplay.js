@@ -162,11 +162,13 @@ const ShopNoteDisplay = ({ shopnote }) => {
         </span>
       )}
 
-      {shopnote.items.map((item) => (
-        <div className="text-sm">
-          <ShopNoteItemDisplay item={item} />
-        </div>
-      ))}
+      {[...shopnote.items]
+        .sort((a, b) => a.name > b.name)
+        .map((item) => (
+          <div className="text-sm">
+            <ShopNoteItemDisplay item={item} />
+          </div>
+        ))}
     </div>
   )
 }
